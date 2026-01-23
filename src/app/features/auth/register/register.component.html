@@ -1,28 +1,48 @@
-<div class="container-fluid bg-dark min-vh-100">
-    <div class="row justify-content-center align-items-center min-vh-100">
-        <div class="col-12 col-md-8 col-lg-5">
-            <div class="mx-auto w-100 w-md-75 w-lg-100 p-4 p-md-5 rounded-4 bg-dark text-white shadow">
-                <button class="btn btn-link text-white p-0 mb-3">
-                    <i class="bi bi-arrow-left fs-3"></i>
+<!-- Estructura principal: Contenedor de pantalla completa con fondo oscuro y centrado flexbox -->
+<div class="container-fluid bg-dark min-vh-100 d-flex align-items-center justify-content-center">
+    
+    <!-- Fila del sistema de grillas (Bootstrap) para alinear el contenido horizontalmente -->
+    <div class="row w-100 justify-content-center">
+        
+        <!-- Columna responsiva: Define el ancho de la tarjeta (12 en móvil, hasta 4 en pantallas extra grandes) -->
+        <div class="col-12 col-md-8 col-lg-5 col-xl-4">
+            
+            <!-- Contenedor de relleno (padding) que actúa como la tarjeta visual del formulario -->
+            <div class="p-4 p-md-5">
+                
+                <!-- Botón de navegación para regresar -->
+                <button class="btn btn-link text-white p-0 mb-4 text-decoration-none">
+                    <i class="bi bi-arrow-left fs-4"></i>
                 </button>
-                <h2 class="text-center fw-bold mb-1" style="letter-spacing: 1px">
+
+                <!-- Título de la marca / Logo -->
+                <h2 class="text-center text-white fw-bold mb-2 text-uppercase ls-3">
                     IRONFLOW
                 </h2>
-                <h1 class="text-center fw-bold mb-2" style="font-size: 2.2rem">
+
+                <!-- Título principal de la sección -->
+                <h1 class="text-center text-white fw-bold mb-3 fs-1">
                     Create your account
                 </h1>
-                <p class="text-center text-secondary mb-4 fs-5">
+
+                <!-- Subtítulo descriptivo -->
+                <p class="text-center text-secondary mb-4">
                     Join the flow and start tracking your gains today.
                 </p>
 
+                <!-- Formulario Reactivo de Angular: Vinculado al 'registerFormGroup' y maneja el evento submit -->
                 <form [formGroup]="registerFormGroup" (ngSubmit)="onSubmit()">
+                    
+                    <!-- Grupo: Campo de Email -->
                     <div class="mb-3">
-                        <label for="email" class="form-label fw-bold">Email Address</label>
+                        <label for="email" class="form-label text-white fw-semibold mb-2">Email Address</label>
+                        <!-- Input vinculado al control 'email' del formulario -->
                         <input type="email" id="email"
-                            class="form-control form-control-lg bg-secondary text-white border-0 rounded-4"
+                            class="form-control form-control-lg bg-dark text-white border border-secondary rounded-3"
                             placeholder="Enter your email" formControlName="email" />
+                        <!-- Sección de validaciones: Se muestra si el campo fue tocado y es inválido -->
                         <div *ngIf="registerFormGroup.get('email')?.touched && registerFormGroup.get('email')?.invalid"
-                            class="text-danger mt-1">
+                            class="text-danger mt-2 small">
                             <small *ngIf="registerFormGroup.get('email')?.errors?.['required']">Email is
                                 required.</small>
                             <small *ngIf="registerFormGroup.get('email')?.errors?.['email']">Please enter a valid email
@@ -30,70 +50,115 @@
                         </div>
                     </div>
 
+                    <!-- Grupo: Campo de Password -->
                     <div class="mb-3">
-                        <label for="password" class="form-label fw-bold">Password</label>
+                        <label for="password" class="form-label text-white fw-semibold mb-2">Password</label>
                         <div class="position-relative">
+                            <!-- Input con tipo dinámico (texto o contraseña) según la variable 'showPassword' -->
                             <input [type]="showPassword ? 'text' : 'password'" id="password"
-                                class="form-control form-control-lg bg-secondary text-white border-0 rounded-4 pe-5"
+                                class="form-control form-control-lg bg-dark text-white border border-secondary rounded-3 pe-5"
                                 placeholder="Create a password" formControlName="password" />
+                            <!-- Botón (icono) para alternar la visibilidad de la contraseña -->
                             <span class="position-absolute top-50 end-0 translate-middle-y me-3" style="cursor: pointer"
                                 (click)="togglePasswordVisibility('password')">
-                                <i class="bi" [ngClass]="showPassword ? 'bi-eye-slash' : 'bi-eye'"
-                                    class="fs-3 text-black"></i>
+                                <i class="bi text-secondary" [ngClass]="showPassword ? 'bi-eye-slash' : 'bi-eye'"></i>
                             </span>
                         </div>
+                        <!-- Validaciones del campo Password -->
                         <div *ngIf="registerFormGroup.get('password')?.touched && registerFormGroup.get('password')?.invalid"
-                            class="text-danger mt-1">
+                            class="text-danger mt-2 small">
                             <small *ngIf="registerFormGroup.get('password')?.errors?.['required']">Password is
                                 required.</small>
-                            <small *ngIf="registerFormGroup.get('password')?.errors?.['minlength']">Password must be
-                                at least 6 characters long.</small>
+                            <small *ngIf="registerFormGroup.get('password')?.errors?.['minlength']">Password must be at
+                                least 6 characters long.</small>
                         </div>
                     </div>
 
+                    <!-- Grupo: Campo de Confirmar Password -->
                     <div class="mb-4">
-                        <label for="confirmPassword" class="form-label fw-bold">Confirm Password</label>
+                        <label for="confirmPassword" class="form-label text-white fw-semibold mb-2">Confirm
+                            Password</label>
                         <div class="position-relative">
+                            <!-- Input con tipo dinámico (texto o contraseña) según la variable 'showConfirmPassword' -->
                             <input [type]="showConfirmPassword ? 'text' : 'password'" id="confirmPassword"
-                                class="form-control form-control-lg bg-secondary text-white border-0 rounded-4 pe-5"
+                                class="form-control form-control-lg bg-dark text-white border border-secondary rounded-3 pe-5"
                                 placeholder="Repeat your password" formControlName="confirmPassword" />
+                            <!-- Botón (icono) para alternar la visibilidad de la confirmación -->
                             <span class="position-absolute top-50 end-0 translate-middle-y me-3" style="cursor: pointer"
                                 (click)="togglePasswordVisibility('confirmPassword')">
-                                <i class="bi" [ngClass]="showConfirmPassword ? 'bi-eye-slash' : 'bi-eye'"
-                                    class="fs-3 text-black"></i>
+                                <i class="bi text-secondary"
+                                    [ngClass]="showConfirmPassword ? 'bi-eye-slash' : 'bi-eye'"></i>
                             </span>
                         </div>
+                        <!-- Validaciones del campo Confirm Password (incluye chequeo de coincidencia) -->
                         <div *ngIf="registerFormGroup.get('confirmPassword')?.touched && registerFormGroup.get('confirmPassword')?.invalid"
-                            class="text-danger mt-1">
+                            class="text-danger mt-2 small">
                             <small *ngIf="registerFormGroup.get('confirmPassword')?.errors?.['required']">Confirm
                                 Password is required.</small>
-                            <small *ngIf="registerFormGroup.get('confirmPassword')?.errors?.['mismatch']">
-                                Passwords do not match.
-                            </small>
+                            <small *ngIf="registerFormGroup.get('confirmPassword')?.errors?.['mismatch']">Passwords do
+                                not match.</small>
                         </div>
                     </div>
 
-                    <button type="submit" class="btn btn-primary btn-lg w-100 fw-bold rounded-4 shadow mb-3">
+                    <!-- Botón de envío del formulario: Se deshabilita si el formulario es inválido -->
+                    <button type="submit" class="btn btn-primary btn-lg w-100 fw-bold rounded-3 mb-4"
+                        [disabled]="registerFormGroup.invalid">
                         Create account
                     </button>
                 </form>
 
-                <div class="d-flex align-items-center my-3">
-                    <hr class="flex-grow-1 bg-secondary border-0" style="height: 2px" />
-                    <span class="mx-2 text-secondary fw-bold">or</span>
-                    <hr class="flex-grow-1 bg-secondary border-0" style="height: 2px" />
+                <!-- Separador visual con líneas y texto "o" -->
+                <div class="d-flex align-items-center my-4">
+                    <hr class="flex-grow-1 border-secondary opacity-50 m-0" />
+                    <span class="mx-3 text-secondary">or</span>
+                    <hr class="flex-grow-1 border-secondary opacity-50 m-0" />
                 </div>
 
+                <!-- Botón alternativo para registro con Google -->
                 <button
-                    class="btn btn-outline-light w-100 d-flex align-items-center justify-content-center gap-2 rounded-4 mb-3 btn-lg">
-                    <i class="bi bi-google fs-4"></i>
-                    <span class="fw-bold">Continue with Google</span>
+                    class="btn btn-outline-secondary btn-lg w-100 d-flex align-items-center justify-content-center gap-2 rounded-3 mb-3 text-white"
+                    (click)="login()">
+                    <i class="bi bi-google"></i>
+                    <span>Continue with Google</span>
                 </button>
 
-                <div class="text-center mt-2">
+                <!-- Pie de la tarjeta con enlace para usuarios que ya tienen cuenta -->
+                <div class="text-center mt-4">
                     <span class="text-secondary">Already have an account?</span>
-                    <a routerLink="/auth/login" class="text-primary fw-bold ms-1">Log in</a>
+                    <a routerLink="/auth/login" class="text-primary text-decoration-none fw-semibold ms-1">Log in</a>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL DE ERROR: Se superpone a la pantalla si showErrorModal es verdadero -->
+<div class="modal fade show d-block" tabindex="-1" style="background: rgba(0,0,0,0.7);" *ngIf="showErrorModal">
+    
+    <!-- Contenedor del diálogo modal centrado verticalmente -->
+    <div class="modal-dialog modal-dialog-centered">
+        
+        <!-- Contenido del modal con tema oscuro -->
+        <div class="modal-content bg-dark text-white rounded-4 border border-secondary shadow-lg">
+            
+            <!-- Cabecera del modal: Icono de error y botón cerrar -->
+            <div class="modal-header border-0 pb-0">
+                <i class="bi bi-exclamation-circle text-danger" style="font-size: 2rem;"></i>
+                <button type="button" class="btn-close btn-close-white ms-auto" aria-label="Close"
+                    (click)="closeErrorModal()"></button>
+            </div>
+            
+            <!-- Cuerpo del modal: Título y mensaje de error dinámico -->
+            <div class="modal-body text-center">
+                <h5 class="fw-bold mb-2 text-danger">Registration Error</h5>
+                <p class="text-secondary mb-0">{{ errorMessage }}</p>
+            </div>
+            
+            <!-- Pie del modal: Botón de acción (OK) -->
+            <div class="modal-footer border-0 pt-0 justify-content-center">
+                <button type="button" class="btn btn-primary fw-bold rounded-3 px-4" (click)="closeErrorModal()">
+                    OK
+                </button>
             </div>
         </div>
     </div>

@@ -1,0 +1,35 @@
+<div class="modal fade show d-block" tabindex="-1" style="background: rgba(0,0,0,0.7);">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content bg-dark text-white rounded-4 border border-secondary shadow-lg">
+      <div class="modal-header border-0 pb-0">
+        <i 
+          class="bi" 
+          [ngClass]="{
+            'bi-exclamation-circle text-danger': type === 'error',
+            'bi-check-circle text-success': type === 'success'
+          }"
+          style="font-size: 2rem;"
+        ></i>
+        <button type="button" class="btn-close btn-close-white ms-auto" aria-label="Close" (click)="close()"></button>
+      </div>
+      <div class="modal-body text-center">
+        <h5 class="fw-bold mb-2" [ngClass]="{
+          'text-danger': type === 'error',
+          'text-success': type === 'success'
+        }">
+          {{ title }}
+        </h5>
+        <p class="text-secondary mb-0">{{ message }}</p>
+      </div>
+      <div class="modal-footer border-0 pt-0 justify-content-center">
+        <button 
+          type="button" 
+          class="btn btn-primary fw-bold rounded-3 px-4"
+          (click)="close()"
+        >
+          OK
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,6 +1,15 @@
 # GymFront
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.2.8.
+Este proyecto es una aplicación web desarrollada con Angular para la gestión de usuarios en un gimnasio. Actualmente, permite el registro de nuevos usuarios y la autenticación mediante servicios propios y Google. Incluye componentes para mostrar mensajes de error y una estructura modular para futuras funcionalidades.
+
+Este proyecto fue generado con [Angular CLI](https://github.com/angular/angular-cli) versión 18.2.8.
+
+## Funcionalidades actuales
+
+- Registro de usuarios.
+- Autenticación con Google y autenticación propia.
+- Diálogo para mostrar errores.
+- Estructura modular para agregar nuevas características fácilmente.
 
 ## Development server
 
