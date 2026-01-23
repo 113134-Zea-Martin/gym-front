@@ -1,9 +1,9 @@
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../../../core/services/auth.service';
-import { RegisterRequest } from '../register';
+import { RegisterRequest, RegisterWithGoogleRequest } from '../register';
 import { CommonModule } from '@angular/common';
 import { GoogleAuthService } from '../../../core/services/auth-google.service';
 
@@ -19,15 +19,17 @@ declare const google: any; // ← AGREGAR ESTA LÍNEA
 })
 export class RegisterComponent implements OnDestroy, OnInit {
 
-  registerWithGoogle() {
-    google.accounts.id.prompt();
-  }
   showPassword: boolean = false;
   showConfirmPassword: boolean = false;
 
+
+  showErrorModal = false;
+  errorMessage = '';
+
   constructor(private authService: AuthService,
     private router: Router,
-    private googleAuth: GoogleAuthService) { }
+    private googleAuth: GoogleAuthService,
+    private cdr: ChangeDetectorRef) { }
 
   ngOnInit() {
   }
@@ -38,6 +40,9 @@ export class RegisterComponent implements OnDestroy, OnInit {
       console.log(token);
       this.decodeJWT(token);
       console.log(this.decodeJWT(token));
+      const registerWithGoogleRequest: RegisterWithGoogleRequest = { tokenId: token };
+      console.log(registerWithGoogleRequest);
+      this.registerUserInBackend(registerWithGoogleRequest);
     });
   }
 
@@ -51,14 +56,21 @@ export class RegisterComponent implements OnDestroy, OnInit {
     return JSON.parse(jsonPayload);
   }
 
-  private registerUserInBackend(credential: string) {
-    // Aquí haces la petición HTTP a tu backend
-    // this.http.post('/api/auth/google', { credential })
-    //   .subscribe({
-    //     next: (user) => this.router.navigate(['/dashboard']),
-    //     error: (err) => console.error(err)
-    //   });
-    console.log('Enviar al backend el credential:', credential);
+  private registerUserInBackend(registerWithGoogleRequest: RegisterWithGoogleRequest) {
+    const sub = this.authService.registerGoogleUser(registerWithGoogleRequest).subscribe({
+      next: (response) => {
+        console.log('Google registration successful', response);
+        this.router.navigate(['/auth/login']);
+      },
+      error: (error) => {
+        console.error('Google registration failed', error);
+        this.errorMessage = error.error?.error || 'Registration failed. Please try again.';
+        this.showErrorModal = true;
+        this.cdr.detectChanges();
+      }
+    });
+    this.suscriptions.push(sub);
+    console.log('Enviar al backend el credential:', registerWithGoogleRequest);
   }
 
   passwordMatchValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
@@ -86,8 +98,6 @@ export class RegisterComponent implements OnDestroy, OnInit {
   }, { validators: this.passwordMatchValidator }
   );
 
-
-
   suscriptions: Subscription[] = [];
 
   ngOnDestroy(): void {
@@ -106,10 +116,20 @@ export class RegisterComponent implements OnDestroy, OnInit {
         },
         error: (error) => {
           console.error('Registration failed', error);
+          console.log(error.error);
+          this.errorMessage = error.error || 'Registration failed. Please try again.';
+          this.showErrorModal = true;
+          this.cdr.detectChanges();
         }
       });
       this.suscriptions.push(sub);
     }
+  }
+
+  closeErrorModal() {
+    this.showErrorModal = false;
+    this.errorMessage = '';
+    this.cdr.detectChanges();
   }
 
   togglePasswordVisibility(field: 'password' | 'confirmPassword') {

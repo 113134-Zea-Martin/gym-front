@@ -7,3 +7,7 @@ export interface RegisterResponse {
     id:    number;
     email: string;
 }
+
+export interface RegisterWithGoogleRequest {
+    tokenId: string;
+}
