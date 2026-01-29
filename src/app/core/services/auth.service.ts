@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
-import { RegisterRequest, RegisterResponse, RegisterWithGoogleRequest } from '../../features/auth/register';
+import { loginRequest, loginResponse, RegisterRequest, RegisterResponse, RegisterWithGoogleRequest } from '../../features/auth/register';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -20,5 +20,15 @@ export class AuthService {
   registerGoogleUser(tokenId: RegisterWithGoogleRequest): Observable<RegisterResponse> {
     return this.http.post<RegisterResponse>(`${this.url}/google-register`,  tokenId );
   }
+
+  loginLocalUser(loginRequest: loginRequest): Observable<loginResponse> {
+    return this.http.post<loginResponse>(`${this.url}/login`, loginRequest);
+  }
+
+  loginGoogleUser(tokenId: RegisterWithGoogleRequest): Observable<loginResponse> {
+    return this.http.post<loginResponse>(`${this.url}/google-login`, tokenId);
+  }
+
+  
 
 }

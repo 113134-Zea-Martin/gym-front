@@ -7,7 +7,8 @@ Este proyecto fue generado con [Angular CLI](https://github.com/angular/angular-
 ## Funcionalidades actuales
 
 - Registro de usuarios.
-- Autenticación con Google y autenticación propia.
+- Autenticación con Google y autenticación propia (incluye componentes de login y registro).
+- Panel de control (dashboard) para usuarios autenticados.
 - Diálogo para mostrar errores.
 - Estructura modular para agregar nuevas características fácilmente.
 

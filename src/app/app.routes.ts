@@ -1,11 +1,19 @@
 import { Routes } from '@angular/router';
 import { RegisterComponent } from './features/auth/register/register.component';
+import { LoginComponent } from './features/auth/login/login.component';
+import { DashboardComponent } from './features/core/dashboard/dashboard.component';
 
 export const routes: Routes = [
     {
-        path: 'register', component: RegisterComponent
+        path: 'auth/register', component: RegisterComponent
     },
     {
-        path: '', redirectTo: 'register', pathMatch: 'full'
+        path: '', redirectTo: 'auth/login', pathMatch: 'full'
+    },
+    {
+        path: 'auth/login', component: LoginComponent
+    },
+    {
+        path: 'dashboard', component: DashboardComponent
     }
 ];
