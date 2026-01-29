@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../../../core/services/auth.service';
 import { RegisterRequest, RegisterWithGoogleRequest } from '../register';
@@ -13,7 +13,7 @@ declare const google: any; // ← AGREGAR ESTA LÍNEA
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, RouterLink],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css'
 })
@@ -43,6 +43,22 @@ export class RegisterComponent implements OnDestroy, OnInit {
       const registerWithGoogleRequest: RegisterWithGoogleRequest = { tokenId: token };
       console.log(registerWithGoogleRequest);
       this.registerUserInBackend(registerWithGoogleRequest);
+
+      const loginWithGoogleRequest = { tokenId: token };
+      const sub = this.authService.loginGoogleUser(loginWithGoogleRequest).subscribe({
+        next: (response) => {
+          console.log('Login exitoso con Google:', response);
+          localStorage.setItem('auth_token', response.token);
+          this.router.navigate(['/dashboard']);
+        },
+        error: (error) => {
+          console.error('Error en el login con Google:', error);
+          this.errorMessage = error.error.error || 'Error desconocido';
+          this.showErrorModal = true;
+          this.cdr.detectChanges();
+        }
+      });
+      this.suscriptions.push(sub);
     });
   }
 
@@ -60,7 +76,7 @@ export class RegisterComponent implements OnDestroy, OnInit {
     const sub = this.authService.registerGoogleUser(registerWithGoogleRequest).subscribe({
       next: (response) => {
         console.log('Google registration successful', response);
-        this.router.navigate(['/auth/login']);
+        // this.router.navigate(['/auth/login']);        
       },
       error: (error) => {
         console.error('Google registration failed', error);
@@ -117,7 +133,7 @@ export class RegisterComponent implements OnDestroy, OnInit {
         error: (error) => {
           console.error('Registration failed', error);
           console.log(error.error);
-          this.errorMessage = error.error || 'Registration failed. Please try again.';
+          this.errorMessage = error.error.error || 'Registration failed. Please try again.';
           this.showErrorModal = true;
           this.cdr.detectChanges();
         }
